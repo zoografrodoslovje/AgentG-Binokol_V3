@@ -5,4 +5,4 @@ nixPkgs = ["python310", "python310Packages.pip"]
 cmds = ["pip install ."]
 
 [start]
-cmd = "uvicorn AGENT_Joko.dashboard.api:create_app --factory --host 0.0.0.0 --port $PORT"
+cmd = "uvicorn agent_joko.dashboard.api:create_app --factory --host 0.0.0.0 --port $PORT"

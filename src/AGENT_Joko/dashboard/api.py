@@ -553,10 +553,10 @@ class DashboardState:
     def _legacy_default_output_dirs(self) -> set[str]:
         workspace_root = Path(self._workspace_root()).resolve()
         return {
-            str((Path.home() / "Desktop" / "AGENT_Joko BUILDS").resolve()),
-            str((Path.home() / "output" / "AGENT_Joko").resolve()),
+            str((Path.home() / "Desktop" / "agent_joko BUILDS").resolve()),
+            str((Path.home() / "output" / "agent_joko").resolve()),
             str((Path.home() / "output" / "GoKo_Binokol_V2").resolve()),
-            str((Path.home() / "output" / "AGENT_Joko").resolve()),
+            str((Path.home() / "output" / "agent_joko").resolve()),
             str((workspace_root / "exports").resolve()),
             str(workspace_root),
         }
@@ -787,7 +787,7 @@ class DashboardState:
                         "MAX_RETRIES = 3",
                         "INITIAL_DELAY = 2",
                         "BACKOFF_FACTOR = 2",
-                        'USER_AGENT = "AGENT_Joko/1.0"',
+                        'USER_AGENT = "agent_joko/1.0"',
                         "TIMEOUT = 30",
                         "",
                         f"FIELDNAMES = {SCRAPER_CSV_FIELDS!r}",
@@ -1638,7 +1638,7 @@ class DashboardState:
             return {"success": False, "error": "Code too long"}
 
         env = os.environ.copy()
-        # Let snippets import the project package by default (AGENT_Joko is one level above workspace_root).
+        # Let snippets import the project package by default (agent_joko is one level above workspace_root).
         env["PYTHONPATH"] = os.pathsep.join(
             [str(_here().parent.parent.resolve()), env.get("PYTHONPATH", "")]
         ).strip(os.pathsep)
@@ -1697,7 +1697,7 @@ class DashboardState:
 
 
 def create_app(config: Optional[Config] = None) -> FastAPI:
-    app = FastAPI(title="AGENT_Joko Dashboard", version="1.0.0")
+    app = FastAPI(title="agent_joko Dashboard", version="1.0.0")
     state = DashboardState(config=config)
 
     templates = Jinja2Templates(directory=str((_here() / "templates").resolve()))

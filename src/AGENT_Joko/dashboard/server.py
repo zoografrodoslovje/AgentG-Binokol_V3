@@ -12,7 +12,7 @@ from .api import create_app
 def main(argv: list[str] | None = None) -> int:
     import os
 
-    parser = argparse.ArgumentParser(description="AGENT_Joko Dashboard")
+    parser = argparse.ArgumentParser(description="agent_joko Dashboard")
     parser.add_argument(
         "--host",
         default=os.environ.get("HOST", "127.0.0.1"),

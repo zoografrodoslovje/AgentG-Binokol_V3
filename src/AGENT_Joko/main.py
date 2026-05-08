@@ -421,7 +421,7 @@ class DevinCLI:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="AGENT_Joko - Hybrid local/OpenRouter autonomous AI developer",
+        description="agent_joko - Hybrid local/OpenRouter autonomous AI developer",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     

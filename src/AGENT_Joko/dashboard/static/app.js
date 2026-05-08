@@ -82,7 +82,7 @@ let chatStreaming = false;
 let chatLastAssistantEl = null;
 let chatSelectedModel = null;
 let chatPrimaryModel = null;
-const DEFAULT_OUTPUT_DIR = "C:\\pinokio\\api\\AGENT_Joko\\FINISHED_WORK";
+const DEFAULT_OUTPUT_DIR = "C:\\pinokio\\api\\agent_joko\\FINISHED_WORK";
 let finishVisibilityInterval = null;
 let finishAnimationTimers = [];
 

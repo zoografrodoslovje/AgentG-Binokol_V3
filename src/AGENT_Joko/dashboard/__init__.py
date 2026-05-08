@@ -1,3 +1,3 @@
 """
-Local web dashboard for AGENT_Joko.
+Local web dashboard for agent_joko.
 """
