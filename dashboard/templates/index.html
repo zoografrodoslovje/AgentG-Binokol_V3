@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AGENT_Joko</title>
+    <link rel="stylesheet" href="/static/app.css?v={{ asset_version }}" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg class="logoSvg" viewBox="0 0 64 64" focusable="false">
+              <defs>
+                <linearGradient id="logoBeam" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8B7BFF"></stop>
+                  <stop offset="100%" stop-color="#22D3EE"></stop>
+                </linearGradient>
+              </defs>
+              <circle cx="32" cy="32" r="26" class="logoHalo"></circle>
+              <path d="M20 40 32 17l6 4-10 20z" class="logoBody"></path>
+              <path d="M34 19 45 24l-3 6-11-5z" class="logoLens"></path>
+              <circle cx="46" cy="24" r="4" class="logoGlass"></circle>
+              <path d="M28 38 18 50M29 38l10 12M24 45h16" class="logoStand"></path>
+            </svg>
+          </div>
+          <div class="brandText">
+            <div class="brandTitle">AGENT_Joko</div>
+            <div class="brandSub">
+              <span id="ollamaDot" class="dot ok"></span>
+              <span id="ollamaStatus">Checking model runtime...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">Overview</div>
+          <button class="navItem active" data-view="overview" data-target="cardTask">Overview</button>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">Agents</div>
+          <button class="navItem navAgent" data-view="agents" data-target="cardActivity" data-agent="architect"><span class="agentLabel">Architect</span><span class="agentLight architect" data-agent="architect" aria-hidden="true"></span></button>
+          <button class="navItem navAgent" data-view="agents" data-target="cardActivity" data-agent="coder"><span class="agentLabel">Coder</span><span class="agentLight coder" data-agent="coder" aria-hidden="true"></span></button>
+          <button class="navItem navAgent" data-view="agents" data-target="cardActivity" data-agent="tester"><span class="agentLabel">Tester</span><span class="agentLight tester" data-agent="tester" aria-hidden="true"></span></button>
+          <button class="navItem navAgent" data-view="agents" data-target="cardActivity" data-agent="fixer"><span class="agentLabel">Fixer</span><span class="agentLight fixer" data-agent="fixer" aria-hidden="true"></span></button>
+          <button class="navItem navAgent" data-view="agents" data-target="cardActivity" data-agent="debator"><span class="agentLabel">Debator</span><span class="agentLight debator" data-agent="debator" aria-hidden="true"></span></button>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">Tools</div>
+          <button class="navItem" data-view="tools" data-target="cardPython">Python</button>
+          <button class="navItem" data-view="tools" data-target="cardFiles">Files</button>
+          <button class="navItem" data-view="tools" data-target="cardOutput">Output</button>
+          <button class="navItem" data-view="tools" data-target="cardMemory">Memory</button>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">Chat</div>
+          <button class="navItem" data-view="chat">Chat</button>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">Queue</div>
+          <button class="navItem" data-view="queue" data-target="cardActivity">Task Queue</button>
+        </div>
+
+        <div class="navGroup">
+          <div class="navTitle">System</div>
+          <button class="navItem" data-view="failures">Failure Log</button>
+          <button class="navItem" data-view="status" data-target="cardStatus">Status</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbarLeft"></div>
+          <div class="topbarRight">
+            <label class="select">
+              <span>Workflow</span>
+              <select id="workflow">
+                <option value="auto">auto</option>
+                <option value="manual">manual</option>
+                <option value="full">full</option>
+                <option value="code_only">code_only</option>
+                <option value="debate_only">debate_only</option>
+              </select>
+            </label>
+            <button id="runBtn" class="btn primary">Run</button>
+            <button id="stopAgentsBtn" class="btn danger">Stop the Agents</button>
+          </div>
+        </header>
+
+        <section id="viewOverview" class="grid view active">
+          <div id="cardTask" class="card span2">
+            <div class="cardHeader">
+              <div class="cardTitle">Current Task</div>
+              <div class="cardActions">
+                <div id="finishPresence" class="finishPresence is-visible">
+                  <button id="finishBtn" class="finishAction" type="button" aria-label="Finish">
+                    <span class="finishText">Finish</span>
+                    <span class="finishProgress" aria-hidden="true"></span>
+                    <svg class="finishCheckSvg" viewBox="0 0 25 30" aria-hidden="true" focusable="false">
+                      <path class="finishCheck" d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2" />
+                    </svg>
+                  </button>
+                </div>
+                <button id="clearBtn" class="btn ghost">Clear</button>
+              </div>
+            </div>
+            <textarea id="taskInput" class="taskInput" placeholder="Describe what you want to build or fix..." maxlength="100000"></textarea>
+            <div class="hint">
+              <span>Tip: use "full" for architect -> coder -> tester -> fixer.</span>
+              <span id="taskInputMeta">0 / 100000</span>
+            </div>
+          </div>
+
+          <div id="cardStatus" class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Routing &amp; Model</div>
+            </div>
+            <div class="kv">
+              <div class="k">Session</div><div class="v" id="sessionId">-</div>
+              <div class="k">Running</div><div class="v" id="running">-</div>
+              <div class="k">Queue</div><div class="v" id="queueStats">-</div>
+              <div class="k">Model</div><div class="v" id="modelName">-</div>
+              <div class="k">Routing</div><div class="v" id="routeInfo">-</div>
+            </div>
+            <pre id="statusRaw" class="toolOut compact"></pre>
+          </div>
+
+          <div id="cardActivity" class="card span2">
+            <div class="cardHeader">
+              <div class="cardTitle">Activity</div>
+              <div class="cardActions">
+                <select id="taskSelect" class="miniSelect"></select>
+                <span id="taskState" class="pill">-</span>
+                <button id="pullAgainBtn" class="btn primary">Pull again</button>
+              </div>
+            </div>
+            <div id="activity" class="activity"></div>
+          </div>
+
+          <div id="cardFiles" class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Workspace Files</div>
+              <div class="cardActions">
+                <button id="filesUp" class="btn ghost">Up</button>
+                <button id="filesRefresh" class="btn ghost">Refresh</button>
+              </div>
+            </div>
+            <div class="subhead"><span class="muted">Path:</span> <span id="filesPath" class="mono">.</span></div>
+            <div id="files" class="files"></div>
+            <pre id="filePreview" class="toolOut compact"></pre>
+          </div>
+
+          <div id="cardMemory" class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Memory (Recent)</div>
+              <div class="cardActions">
+                <button id="memRefresh" class="btn ghost">Refresh</button>
+              </div>
+            </div>
+            <div class="tool toolCompact">
+              <input id="memQuery" class="toolInput" placeholder="Search memory..." />
+              <button id="memSearch" class="btn">Search</button>
+            </div>
+            <div id="memory" class="memory"></div>
+          </div>
+
+          <div id="cardOutput" class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Save Destination</div>
+              <div class="cardActions buttonRow">
+                <button id="outputUseCurrent" class="btn ghost">Use FINISHED_WORK</button>
+                <button id="outputSave" class="btn primary compactBtn">Save</button>
+              </div>
+            </div>
+            <div class="outputPanel">
+              <input id="outputDir" class="toolInput outputInput" placeholder="Folder path for finished task files..." />
+              <div class="outputMeta">
+                <div class="outputRow">
+                  <span class="muted">Resolved</span>
+                  <span id="outputResolved" class="mono">-</span>
+                </div>
+                <div class="outputNote">
+                  Finished tasks export `.json`, `.md`, and `.txt` artifacts here. Use this folder for generated deliverables such as code, text, and structured output files.
+                </div>
+              </div>
+              <div id="outputStatus" class="pill outputStatus">-</div>
+            </div>
+          </div>
+
+          <div id="cardPython" class="card span2">
+            <div class="cardHeader">
+              <div class="cardTitle">Python</div>
+            </div>
+            <div class="tool">
+              <input id="pyCode" class="toolInput" placeholder="Python code or .py file path..." />
+              <button id="pyRun" class="btn">Run</button>
+            </div>
+            <pre id="pyOut" class="toolOut"></pre>
+          </div>
+        </section>
+
+        <section id="viewQueue" class="view hidden">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Task Queue</div>
+              <div class="cardActions">
+                <button id="queueRefresh" class="btn ghost">Refresh</button>
+              </div>
+            </div>
+            <div class="queueLayout">
+              <div>
+                <div id="queueList" class="queueList"></div>
+              </div>
+              <div>
+                <div class="subhead"><span class="muted">Selected:</span> <span id="queueSelected" class="mono">-</span></div>
+                <div class="tool toolCompact">
+                  <button id="queueStart" class="btn">Start</button>
+                  <button id="queueCancel" class="btn">Cancel</button>
+                  <button id="queueRetry" class="btn ghost">Pull again</button>
+                </div>
+                <div id="queueMeta" class="queueMeta"></div>
+                <div class="subhead"><span class="muted">Goal</span></div>
+                <pre id="queueGoal" class="toolOut compact"></pre>
+                <div class="subhead"><span class="muted">Events</span></div>
+                <div id="queueEvents" class="activity"></div>
+                <div class="subhead"><span class="muted">Result</span></div>
+                <pre id="queueResult" class="toolOut"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="viewChat" class="view hidden">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Chat</div>
+              <div class="cardActions">
+                <div class="modelPicker">
+                  <div class="modelPickerMeta">
+                    <span class="modelPickerLabel">Model</span>
+                    <span id="chatModelHint" class="modelPickerHint">Choose a local or fallback cloud model</span>
+                  </div>
+                  <select id="chatModel" class="modelSelect"></select>
+                  <button id="chatModelSave" class="btn ghost">Set Default</button>
+                </div>
+                <button id="chatClear" class="btn ghost">Clear</button>
+              </div>
+            </div>
+            <div id="chatLog" class="chatLog"></div>
+            <div class="tool">
+              <input id="chatInput" class="toolInput" placeholder="Ask something..." />
+              <button id="chatSend" class="btn primary">Send</button>
+            </div>
+            <div class="subhead">
+              <span id="chatMeta" class="muted"></span>
+            </div>
+            <div class="subhead">
+              <span class="muted">Offline queue:</span> <span id="chatQueue" class="mono">-</span>
+            </div>
+            <div class="tool toolCompact">
+              <button id="chatQueueRefresh" class="btn ghost">Refresh Queue</button>
+            </div>
+            <div id="chatQueueList" class="queueList"></div>
+          </div>
+        </section>
+
+        <section id="viewSystem" class="view hidden">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">System</div>
+              <div class="cardActions">
+                <button id="systemRefresh" class="btn ghost">Refresh</button>
+              </div>
+            </div>
+            <pre id="systemOut" class="toolOut"></pre>
+          </div>
+        </section>
+
+        <section id="viewFailures" class="view hidden">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Agent Failure Registry</div>
+              <div class="cardActions">
+                <button id="failureRefresh" class="btn ghost">Refresh</button>
+                <button id="failureClear" class="btn ghost">Clear</button>
+              </div>
+            </div>
+            <div id="failureSummary" class="failureSummary"></div>
+            <div id="failureList" class="failureList"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="eventModal" class="modalShell hidden" aria-hidden="true">
+      <div id="eventModalBackdrop" class="modalBackdrop"></div>
+      <div class="modalPanel">
+        <div class="cardHeader">
+          <div class="cardTitle">Agent Failure Details</div>
+          <div class="cardActions">
+            <button id="eventModalClose" class="btn ghost">Close</button>
+          </div>
+        </div>
+        <div id="eventModalMeta" class="failureMeta"></div>
+        <pre id="eventModalBody" class="toolOut modalOut"></pre>
+      </div>
+    </div>
+
+    <script src="/static/app.js?v={{ asset_version }}"></script>
+  </body>
+</html>

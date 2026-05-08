@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# App-specific data (regenerated at runtime)
+.devin_agent/
+logs/
+memory/
+.pinokio-temp/
+cache/
+FINISHED_WORK/
+*.csv
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Pinokio (only relevant locally)
+.pinokio-temp/
+pinokio.js
+pinokio.json
+install.json
+start.json
+reset.json
+update.json
+models.json
+ENVIRONMENT
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Misc
+*.log
+*.tmp
+task_*.json
+task_*.md
