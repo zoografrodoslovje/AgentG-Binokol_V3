@@ -8,12 +8,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy only the files needed for installation first to leverage Docker cache
-COPY pyproject.toml ./
+COPY pyproject.toml README.md ./
+COPY src/ ./src/
 
 # Install the package and its dependencies
-# This will install everything listed in [project] dependencies
-# Note: '.' works here because pyproject.toml is in the current directory.
-# We use '--no-deps' first if we wanted to be fancy, but '.' is fine.
 RUN pip install --no-cache-dir .
 
 # Copy the rest of the application code
