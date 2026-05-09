@@ -9,7 +9,7 @@ module.exports = {
           PYTHONPATH: ".."
         },
         message: [
-          "python -m AGENT_Joko.dashboard.server --host 127.0.0.1 --port 0"
+          "python -m agent_joko.dashboard.server --host 127.0.0.1 --port 0"
         ],
         on: [{
           event: "/(http:\\/\\/[0-9.:]+)/",

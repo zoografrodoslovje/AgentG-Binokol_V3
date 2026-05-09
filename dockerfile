@@ -22,4 +22,4 @@ ENV MODEL_WARMUP_ENABLED=false
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
-CMD ["uvicorn", "AGENT_Joko.dashboard.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "agent_joko.dashboard.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
