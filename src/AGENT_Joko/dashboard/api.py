@@ -1696,14 +1696,26 @@ class DashboardState:
             return {"success": False, "error": str(e)}
 
 
+def _resolve_dashboard_dir(subdir: str) -> str:
+    pkg_dir = _here()
+    candidate = pkg_dir / subdir
+    if candidate.is_dir():
+        return str(candidate.resolve())
+    for parent in [Path("/app/src/agent_joko/dashboard"), Path.cwd() / "src" / "agent_joko" / "dashboard"]:
+        alt = parent / subdir
+        if alt.is_dir():
+            return str(alt.resolve())
+    return str(candidate.resolve())
+
+
 def create_app(config: Optional[Config] = None) -> FastAPI:
     app = FastAPI(title="agent_joko Dashboard", version="1.0.0")
     state = DashboardState(config=config)
 
-    templates = Jinja2Templates(directory=str((_here() / "templates").resolve()))
+    templates = Jinja2Templates(directory=_resolve_dashboard_dir("templates"))
     app.mount(
         "/static",
-        StaticFiles(directory=str((_here() / "static").resolve())),
+        StaticFiles(directory=_resolve_dashboard_dir("static")),
         name="static",
     )
 
@@ -1717,7 +1729,7 @@ def create_app(config: Optional[Config] = None) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def index(request: Request):
-        static_root = (_here() / "static").resolve()
+        static_root = Path(_resolve_dashboard_dir("static"))
         asset_version = max(
             (static_root / "app.css").stat().st_mtime_ns,
             (static_root / "app.js").stat().st_mtime_ns,
