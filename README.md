@@ -1,3 +1,13 @@
+---
+title: AgentG Binokol V3
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+license: mit
+app_port: 7860
+---
 # AGENT_Joko
 
 Hybrid local AI developer app for Pinokio.

@@ -15,11 +15,11 @@ COPY . .
 # Runtime data directories
 RUN mkdir -p .devin_agent/memory logs cache FINISHED_WORK
 
-EXPOSE 8000
+EXPOSE 7860
 
 ENV HOST=0.0.0.0
 ENV MODEL_WARMUP_ENABLED=false
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
-CMD ["uvicorn", "agent_joko.dashboard.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "agent_joko.dashboard.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "7860"]
