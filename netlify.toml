@@ -1,0 +1,16 @@
+# Netlify configuration for Python FastAPI app
+[build]
+  # This command installs the package from pyproject.toml and its dependencies.
+  command = "pip install ."
+  # This is the directory where Netlify will find the serverless function.
+  functions = "netlify/functions"
+
+[functions]
+  # Use the provided python runtime
+  included_files = ["src/**"]
+
+[[redirects]]
+  # Redirect all traffic to the serverless function handler.
+  from = "/*"
+  to = "/.netlify/functions/main"
+  status = 200

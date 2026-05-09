@@ -24,6 +24,7 @@ dependencies = [
     "jinja2>=3.1.0",
     "pydantic>=2.0.0",
     "markdown-it-py>=4.0.0",
+    "mangum>=0.17.0",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +45,14 @@ package-dir = {"" = "src"}
 include-package-data = true
 
 [tool.setuptools.package-data]
-agent_joko = ["prompts/*.md", "memory/*.json"]
+[tool.setuptools.package-data]
+agent_joko = [
+    "dashboard/static/*",
+    "dashboard/static/**/*",
+    "dashboard/templates/*",
+    "prompts/*.md",
+    "memory/*.json"
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
